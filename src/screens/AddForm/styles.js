@@ -12,4 +12,8 @@ export const styles = StyleSheet.create({
   formContainer: {
     padding: 20,
   },
+  textError: {
+    fontSize: 14,
+    color: COLORS.ERROR,
+  },
 });

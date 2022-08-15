@@ -1,0 +1,60 @@
+{
+  "data": [
+    {
+      "id": 1,
+      "productName": "Sabonete",
+      "priority": 8,
+      "price": 3.99,
+      "buy": true
+    },
+    {
+      "id": 2,
+      "productName": "Carne",
+      "priority": 8,
+      "price": 23,
+      "buy": true
+    },
+    {
+      "id": 3,
+      "productName": "Tomate",
+      "priority": 8,
+      "price": 42,
+      "buy": true
+    },
+    {
+      "priority": 0,
+      "price": 0,
+      "buy": false,
+      "productName": "batata",
+      "id": 4
+    },
+    {
+      "priority": 0,
+      "price": 0,
+      "buy": false,
+      "productName": "Pão",
+      "id": 5
+    },
+    {
+      "priority": 0,
+      "price": 0,
+      "buy": false,
+      "productName": "Suco",
+      "id": 6
+    },
+    {
+      "priority": 0,
+      "price": 0,
+      "buy": false,
+      "productName": "Papel",
+      "id": 7
+    },
+    {
+      "priority": 0,
+      "price": 0,
+      "buy": false,
+      "productName": "Café",
+      "id": 8
+    }
+  ]
+}

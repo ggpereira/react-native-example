@@ -1,35 +1,19 @@
 import React, { useState } from 'react';
-import { View, FlatList, TouchableOpacity } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { styles } from './styles';
 import { Appbar, Text } from 'react-native-paper';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ListAvatar from '../../../components/ListAvatar';
 import FabButton from '../../../components/FabButton';
 import BottomSheet from '../../../components/BottomSheet';
-
-const MOCK = [
-  {
-    id: 1,
-    productName: 'Sabonete',
-    priority: 8,
-    price: 3.99,
-    buy: true,
-  },
-  {
-    id: 2,
-    productName: 'Carne',
-    priority: 8,
-    price: 23000,
-    buy: false,
-  },
-  {
-    id: 3,
-    productName: 'Tomate',
-    priority: 8,
-    price: 42,
-    buy: false,
-  },
-];
+import { api } from '../../../services/api';
+import useSWR from 'swr';
+import { COLORS } from '../../../theme/globalColors';
 
 const ShoppingItem = ({ item, onLongPress }) => {
   return (
@@ -60,7 +44,19 @@ const ShoppingItem = ({ item, onLongPress }) => {
   );
 };
 
+const fetcher = url =>
+  api
+    .get(url)
+    .then(response => response.data)
+    .catch(e => {
+      throw e;
+    });
+
 export const ShoppingList = ({ navigation }) => {
+  const { data, error, mutate } = useSWR('/data', fetcher);
+
+  const isLoading = !data && !error;
+
   const [showBottomSheet, setShowBottomSheet] = useState(false);
 
   const handleShowBottomSheet = () => setShowBottomSheet(true);
@@ -71,8 +67,15 @@ export const ShoppingList = ({ navigation }) => {
       <Appbar.Header style={styles.headerStyle}>
         <Appbar.Content title="Lista de compras" />
       </Appbar.Header>
+      {isLoading && (
+        <ActivityIndicator
+          animating={isLoading}
+          size={35}
+          color={COLORS.PRIMARY}
+        />
+      )}
       <FlatList
-        data={MOCK}
+        data={data ?? []}
         keyExtractor={item => `${item.id}-${item.productName}`}
         renderItem={({ item }) => (
           <ShoppingItem
@@ -83,7 +86,9 @@ export const ShoppingList = ({ navigation }) => {
       />
       <FabButton
         icon="cart-plus"
-        onPress={() => navigation.navigate('AddFormScreen')}
+        onPress={() =>
+          navigation.navigate('AddFormScreen', { mutateFunc: mutate })
+        }
       />
       {showBottomSheet && (
         <BottomSheet
@@ -94,7 +99,10 @@ export const ShoppingList = ({ navigation }) => {
               label: 'Editar',
               action: () => {
                 handleCloseBottomSheet();
-                navigation.navigate('AddFormScreen', { isUpdate: true });
+                navigation.navigate('AddFormScreen', {
+                  isUpdate: true,
+                  mutateFunc: mutate,
+                });
               },
             },
             {

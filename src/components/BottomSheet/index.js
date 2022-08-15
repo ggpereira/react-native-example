@@ -14,8 +14,11 @@ const BottomSheet = ({ onClose, visible, options }) => {
         <Text style={{ fontSize: 16, fontWeight: 'bold' }}>
           Escolha uma opção
         </Text>
-        {options.map(option => (
-          <TouchableOpacity onPress={() => option.action()}>
+        {options.map((option, index) => (
+          <TouchableOpacity
+            key={`${index}-${option.label}`}
+            onPress={() => option.action()}
+          >
             <Text style={{ fontSize: 14, color: '#1c1c1c' }}>
               {option.label}
             </Text>
